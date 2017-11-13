@@ -1,0 +1,20 @@
+{
+  "name": "tic-tac-toe-js",
+  "version": "1.0.0",
+  "description": "Tic-Tac-Toe JS",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kennyxcao/tic-tac-toe-js.git"
+  },
+  "author": "Kenny Cao",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kennyxcao/tic-tac-toe-js/issues"
+  },
+  "homepage": "https://github.com/kennyxcao/tic-tac-toe-js#readme"
+}
