@@ -1,3 +1,5 @@
+var prompt = require('readline-sync');
+
 // Make a command line tic-tac-toe game from scratch for two players. 
 // Expected features
 // ===============
@@ -25,54 +27,65 @@
 
 // Try your best to work on this challenge without referring to outside resources. However, if you have to look things up online, go ahead. 
 
-function prompt(question, callback) {
-  var stdin = process.stdin;
-  var stdout = process.stdout;
+// function prompt(question, callback) {
+//   var stdin = process.stdin;
+//   var stdout = process.stdout;
 
-  stdin.resume();
-  stdout.write(question);
+//   stdin.resume();
+//   stdout.write(question);
 
-  stdin.once('data', function (data) {
-    callback(data.toString().trim());
-  });
-}
+//   stdin.once('data', function (data) {
+//     callback(data.toString().trim());
+//   });
+// }
 
 // prompt('Whats your name?', function (input) {
 //   console.log(input);
 //   process.exit();
 // });
 
+// var userName = prompt.question('May I have your name? ');
+// console.log('Hi ' + userName + '!');
 
-function displayBoard (board) {
+// var userName2 = prompt.question('May I have your name? ');
+// console.log('Hi ' + userName2 + '!');
+
+
+var displayBoard = function (board) {
   for (var i = 0; i < board.length; i += 3) {
     console.log(board[i], board[i + 1], board[i + 2]);
   }
-}
+};
 
-function playerInput () {
+var isValidMarker = function (marker) {
+  return ['X', 'O'].includes(marker);
+};
+
+var playerInput = function () {
   var marker;
 
-  while (marker !== 'X' || marker !== 'O') {
-    prompt('Player 1: Do you want to be X or O?', function(input) {
-      if (input !== 'X' || input !== '0') {
-        console.log('Please select a valid choice');
-        playerInput();
-      } else {
+  do {
+    marker = prompt.question('Player 1: Do you want to be X or O? ');    
+  } while (!isValidMarker(marker));
 
-      }
-    })
-  }
-}
+  return (marker === 'X') ? ['X', 'O'] : ['O', 'X'];
+};
 
-function placeMarker (board, marker, position) {
+var placeMarker = function (board, marker, position) {
   board[position] = marker;
-}
+};
 
-function winCheck (board, marker) {
-  var winCombo = [ 
-    [0, 1, 2], [3, 4, 5], [6, 7, 8],
-    [0, 3, 6], [1, 4, 7], [2, 5, 8],
-    [0, 4, 8], [2, 4, 6] ];
+var winCheck = function (board, marker) {
+  var winCombos = [ 
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6] 
+  ];
 
   var markPos = [];
 
@@ -82,39 +95,112 @@ function winCheck (board, marker) {
     }
   }
 
-}
+  for (var j = 0; j < winCombos.length; j++) {
+    var combo = winCombos[j];
 
-function chooseFirst () {
+    if (markPos.includes(combo[0]) && markPos.includes(combo[1]) && markPos.includes(combo[2])) {
+      return true;
+    }
+  }
 
-}
+  return false;
+};
 
-function spaceCheck (board, position) {
+var chooseFirst = function () {
+  return Math.random() > 0.5 ? 'Player 1' : 'Player 2';
+};
 
-}
+var spaceCheck = function (board, position) {
+  return !['X', 'O'].includes(board[position - 1]);
+};
 
-function fullBoardCheck (board) {
+var fullBoardCheck = function (board) {
+  for (var i = 0; i < board.length; i++) {
+    if (!['X', 'O'].includes(board[i])) {
+      return false;
+    }
+  }
+  return true;
+};
 
-}
+var isValidPosition = function (position) {
+  return +position >= 1 && +position <= 9;
+};
 
-function playerChoice (board) {
+var playerChoice = function (board) {
+  var pos = '';
 
-}
+  do {
+    pos = prompt.question('Please input your next move (1-9): ');    
+  } while (!isValidPosition(pos) || !spaceCheck(board, +pos));
 
-function startNewGame () {
+  return +pos - 1;
+};
+
+var replay = function() {
+  var choice = prompt.question('Play again (Y or N)?');
+  return choice[0].toUpperCase() === 'Y';
+};
+
+var startNewGame = function () {
   while (true) {
+    var [p1, p2] = playerInput();
     var theBoard = ['*', '*', '*', '*', '*', '*', '*', '*', '*'];
     var gameOn = true;
     var turn = chooseFirst();
+    var pos;
     console.log(turn, 'will go first');
 
     while (gameOn) {
       if (turn === 'Player 1') {
         console.log('Player 1\'s Turn');
         displayBoard(theBoard);
+        pos = playerChoice(theBoard);
+        placeMarker(theBoard, p1, pos);
+
+        if (winCheck(theBoard, p1)) {
+          displayBoard(theBoard);
+          console.log('Congrats Player 1 Won the Game');
+          gameOn = false;
+        } else {
+          if (fullBoardCheck(theBoard)) {
+            displayBoard(theBoard);
+            console.log('Tie game');
+            gameOn = false;
+          } else {
+            turn = 'Player 2';
+          }
+        }
+      } else {
+        console.log('Player 2\'s Turn');
+        displayBoard(theBoard);
+        pos = playerChoice(theBoard);
+        placeMarker(theBoard, p2, pos);
+
+        if (winCheck(theBoard, p2)) {
+          displayBoard(theBoard);
+          console.log('Congrats Player 2 Won the Game');
+          gameOn = false;
+        } else {
+          if (fullBoardCheck(theBoard)) {
+            displayBoard(theBoard);
+            console.log('Tie game');
+            gameOn = false;
+          } else {
+            turn = 'Player 1';
+          }
+        }
       }
     }
+
+    if (!replay()) {
+      console.log('Goodbye!!!');
+      break;
+    }
   }
-}
+};
+
+startNewGame();
 
 // var theBoard = ['*', '*', '*', '*', '*', '*', '*', '*', '*'];
 // displayBoard(theBoard);

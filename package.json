@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/kennyxcao/tic-tac-toe-js/issues"
   },
-  "homepage": "https://github.com/kennyxcao/tic-tac-toe-js#readme"
+  "homepage": "https://github.com/kennyxcao/tic-tac-toe-js#readme",
+  "dependencies": {
+    "readline-sync": "^1.4.7"
+  }
 }
