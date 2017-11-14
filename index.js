@@ -27,30 +27,6 @@ var prompt = require('readline-sync');
 
 // Try your best to work on this challenge without referring to outside resources. However, if you have to look things up online, go ahead. 
 
-// function prompt(question, callback) {
-//   var stdin = process.stdin;
-//   var stdout = process.stdout;
-
-//   stdin.resume();
-//   stdout.write(question);
-
-//   stdin.once('data', function (data) {
-//     callback(data.toString().trim());
-//   });
-// }
-
-// prompt('Whats your name?', function (input) {
-//   console.log(input);
-//   process.exit();
-// });
-
-// var userName = prompt.question('May I have your name? ');
-// console.log('Hi ' + userName + '!');
-
-// var userName2 = prompt.question('May I have your name? ');
-// console.log('Hi ' + userName2 + '!');
-
-
 var displayBoard = function (board) {
   for (var i = 0; i < board.length; i += 3) {
     console.log(board[i], board[i + 1], board[i + 2]);
@@ -202,5 +178,3 @@ var startNewGame = function () {
 
 startNewGame();
 
-// var theBoard = ['*', '*', '*', '*', '*', '*', '*', '*', '*'];
-// displayBoard(theBoard);
